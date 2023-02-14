@@ -33,7 +33,7 @@ const AppProvider = ({ children }) => {
       const data = await response.json();
 
       const { hits, nbPages } = data
-      console.log(data);
+
       dispatch({ type: SET_STORIES, payload: { hits, nbPages } })
 
     } catch (error) {
