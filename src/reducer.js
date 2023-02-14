@@ -8,12 +8,15 @@ import {
 
 const reducer = (state, action) => {
 
+  const { payload } = action
+
   switch (action.type) {
     case SET_LOADING:
 
       return { ...state, isLoading: true }
 
-      break;
+    case SET_STORIES:
+      return { ...state, isLoading: false, hits: payload.hits, nbPage: payload.nbPage }
 
     default:
       throw new Error(`no matching "${action.type}" action type`)

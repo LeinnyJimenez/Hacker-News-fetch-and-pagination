@@ -12,7 +12,11 @@ import reducer from './reducer'
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?'
 
 const initialState = {
-  isLoading: true
+  isLoading: true,
+  hits: [],
+  query: 'react',
+  page: 0,
+  nbPages: 0
 }
 
 const AppContext = React.createContext()
@@ -21,12 +25,24 @@ const AppProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const fetchStories = async () => {
+  const fetchStories = async (url) => {
     dispatch({ type: SET_LOADING })
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      const { hits, nbPages } = data
+      console.log(data);
+      dispatch({ type: SET_STORIES, payload: { hits, nbPages } })
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(() => {
-    fetchStories()
+    fetchStories(`${API_ENDPOINT}query=${state.query}&page=${state.page}`)
   }, []);
 
 
